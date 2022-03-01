@@ -1,0 +1,60 @@
+<html>  
+<head>  
+<script type="text/javascript" src="app.js">
+    </script>  
+<link rel="stylesheet" href="style.css">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+<body onload = final()> 
+
+	<div>
+	<h1 class="section">Trends in Human Trafficking</h1>
+
+	<div id = "Forms of Trafficking">
+		<h2 class = "subsection">Forms of Trafficking</h2>
+		<div id = "bar_plot_forms", class = "center_plot">
+		</div>
+	</div>
+
+	<div>
+		<h3 class = "subsubsection"> Forms of Trafficking Over the Years </h3>	
+			<div id="radio" class="center_plot">
+       			 <input type="radio" id="steam_female" name="gender" value="Female" checked="checked">
+       			 <label for="female">Female</label>
+
+       			 <input type="radio" id="steam_male" name="gender" value="Male">
+       			 <label for="male">Male</label>
+       		</div>
+			<div id = "steamgraph", class = "center_plot">
+		</div>
+	</div>
+
+	<div id = "Forced Marriage/Sex Trafficking">
+		<h2 class = "subsubsection">Is there a Relationship between Forced Marriages and Sexual Exploitation Across Countries?</h2>
+		<div id = "scatter_plot", class = "center_plot">
+		</div>
+	</div>
+
+	<div id = "Recruiter Relationship">
+		<h2 class = "subsection">Recruiter Relationships</h2>
+		<div id = "bar_plot_recruiter", class = "center_plot">
+		</div>
+	</div>
+
+	<div id = "Trafficking Pathways">  
+		<h2 class = "subsection">Trafficking Pathways</h2>
+		<div id = "network", class = "center_plot">
+		</div>
+	</div>
+
+
+	<div id = "Prevalence Countries">
+		<h2 class = "subsection">Prevalence of Trafficking Across Countries</h2>
+		<div id = "choropleth_plot", class = "center_plot">
+		</div>
+	</div>
+
+	</div>
+
+</body>
