@@ -40,3 +40,11 @@
     font-family: sans-serif;
     font-size: 12;
 }
+.node{
+	opacity: 0.9;
+}
+
+.link{
+	stroke: #2282BA;
+	stroke-width:2;
+}
