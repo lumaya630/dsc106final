@@ -6,7 +6,8 @@ function final(){
     scatter_plot(filePath);
     bar_plot_recruiters(filePath);
     network_plot(filePath);
-    choropleth_plot(filePath)
+    choropleth_plot(filePath);
+    yuh(filePath);
 }
 
 // helper function to read in data
@@ -982,3 +983,153 @@ function choropleth_plot(filePath){
 
 
 }
+var yuh = function(filePath) {
+    tmp = [];
+
+    let data = read_data(filePath);
+//making the unique age bracket keys
+    data.then(function(data) {
+    	for (let a = 0; a < data.length; a++) {
+    		if (data[a].age != "-99") {
+    			tmp.push(data[a].age);
+
+    		}
+    	}
+		let ageBrackets = [...new Set(tmp)];
+		var groups = ageBrackets;
+
+
+	    //making dictionary
+	    dct = {}
+	    for (let a = 0; a < ageBrackets.length; a++) {
+	    	dct[ageBrackets[a]] = {"isForcedLabour": 0,
+			"isAbduction": 0,
+			"isSexualExploit": 0,
+			"isForcedMarriage": 0,
+			"isOrganRemoval": 0,
+			"isOtherExploit": 0,
+			"isForcedMilitary": 0,
+			"isOther": 0}
+	    }
+	    
+		
+	    for (let a = 0; a < data.length; a++) {
+	    	if (data[a].age != "-99") {
+	    		if (data[a].isForcedLabour == 0) {
+	    			dct[data[a].age]["isForcedLabour"] +=1;
+	    		}
+	    		if (data[a].isAbduction == 0) {
+	    			dct[data[a].age]["isAbduction"] +=1;
+	    		}
+	    		if (data[a].isSexualExploit == 0) {
+	    			dct[data[a].age]["isSexualExploit"] +=1;
+	    		}
+	    		if (data[a].isForcedMarriage == 0) {
+	    			dct[data[a].age]["isForcedMarriage"] +=1;
+	    		}
+	    		if (data[a].isOrganRemoval == 0) {
+	    			dct[data[a].age]["isOrganRemoval"] +=1;
+	    		}
+	    		if (data[a].isOtherExploit == 0) {
+	    			dct[data[a].age]["isOtherExploit"] +=1;
+	    		}
+	    		if (data[a].isForcedMilitary == 0) {
+	    			dct[data[a].age]["isForcedMilitary"] +=1;
+	    		}
+	    		if (data[a].isOther == 0) {
+	    			dct[data[a].age]["isOther"] +=1;
+	    		}
+	    	}
+	    }
+		var margin = {top: 20, right: 50, bottom: 30, left: 0},
+            width = 350 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
+
+        function newdct(tmp) {
+
+
+
+            var s = Object.keys(tmp).map(function(x) {
+              return tmp[x];
+            });
+
+            var rs = Object.keys(tmp).map(function(y) {
+              return y;
+            });
+            var svg;
+
+
+            svg = d3.select("#yuh")
+              .append("svg").attr("id", "tempp")
+                .attr("height", 400)
+                .attr("width", 460)
+              .append("g")
+                .attr("transform",
+                      "translate(60,30)");
+
+            var helper = d3.select('#yuh').append('div').style('opacity', 0).attr('class', 'tooltip');
+            
+            var y_Scale = d3.scaleLinear()
+              .domain([0, 2000])
+              .range([ 300, 10]);
+
+            svg.append("g")
+              .call(d3.axisLeft(y_Scale));
+
+            var x_Scale = d3.scaleBand()
+              .range([0,370])
+              .domain(rs)
+              .padding(0.15);
+
+            svg.append("g")
+                .style("text-anchor", "end")
+              .attr("transform", "translate(0,300)")
+              .call(d3.axisBottom(x_Scale))
+              .selectAll("text")
+                .attr("transform", "translate(-10,0)rotate(-45)");
+
+            var helper2 = d3.line().y(function(tmp) { return y_Scale(tmp) }).x(function(tmp) { return x_Scale(rs[s.indexOf(tmp)]) + 25 })
+            
+
+            var yx = svg.selectAll("mybar")
+              .data(s);
+            yx.exit().remove();
+            yx.enter()
+              .append("circle")
+                .attr("cy", function(tmp) { return y_Scale(tmp); })
+                .attr("cx", function(tmp) { return 26 + x_Scale(rs[s.indexOf(tmp)]); })
+                .attr("r", 5)
+                .on("mousemove", (a,b)=> {
+                    helper.transition().style("opacity", 0.5).duration(140);
+                    helper.style("top", a.pageY + "px").style("left", a.pageX + "px").html(b.toFixed(3));
+                })
+                .on("mouseover", (a,b)=> {
+                    helper.transition().style("opacity", 0.5).duration(140);
+                    helper.style("top", a.pageY + "px").style("left", a.pageX + "px").html(b.toFixed(3));
+                })
+                .attr("stroke", "none")
+                .attr("class", "circle")
+                .attr("fill", "orange");
+            svg.append("text")
+            .attr("class", "title")
+            .attr("x", 0)
+            .attr("y", -10);
+            svg.append("text")
+            .attr("text-anchor", "end")
+            .attr("class", "y label")
+            .attr("y", -30)
+            .attr("x", -40)
+            .style("font-size", 15)
+            .attr("transform", "rotate(-90)");
+
+        }
+
+        d3.selectAll("#radio").on("change", tmp=>{
+        	var age = tmp.target.value;
+        	console.log("yay");
+        })
+
+
+        newdct(dct["0--8"]);
+    }
+)}
