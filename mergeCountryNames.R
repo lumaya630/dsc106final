@@ -20,7 +20,3 @@ with_names <- with_names %>% left_join(codes, by = c("CountryOfExploitation" = "
 
 # save
 write.csv(with_names, "ctdc_data_final.csv")
-dat$citizenship
-codes$Alpha2
-
-trimws(codes$Alpha.2.code)

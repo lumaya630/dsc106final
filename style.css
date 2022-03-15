@@ -48,3 +48,13 @@
 	stroke: #2282BA;
 	stroke-width:2;
 }
+
+.y-label{
+	font-family: Gill Sans, sans-serif;
+	font-size: 13px;
+}
+
+.x-label{
+	font-family: Gill Sans, sans-serif;
+	font-size: 13px;
+}

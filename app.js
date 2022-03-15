@@ -92,7 +92,7 @@ var bar_plot_forms = function(filePath){
 		var svgwidth = 700;
         var svgheight = 300;
 
-        var margin = {top: 20, right: 20, bottom: 20, left: 40},
+        var margin = {top: 20, right: 20, bottom: 20, left: 75},
         width = svgwidth - margin.left - margin.right,
         height = svgheight - margin.bottom;
         
@@ -103,7 +103,11 @@ var bar_plot_forms = function(filePath){
         var yScale = d3.scaleLinear().domain([d3.min(d3.map(formsExploit, d => d.value))
         	, d3.max(d3.map(formsExploit, d => d.value))])
         	.range([height, margin.top])
-       	var xAxis = d3.axisBottom().scale(xScale)
+
+        var tickLabels = ["Sexual Exploitation", "Forced Labor", "Other", "Forced Marriage", 
+        "Abduction", "Organ Removal", "Forced Military" ]
+       	var xAxis = d3.axisBottom().scale(xScale).
+       	tickFormat((d,i) => tickLabels[i])
        	var yAxis = d3.axisLeft().scale(yScale)
 
        	// tooltip
@@ -149,10 +153,19 @@ var bar_plot_forms = function(filePath){
         .attr("transform", "translate(" + 0 + "," + height + ")")
         .call(xAxis)
 
+
         svg.append("g")
         .attr("class", "yAxis")
        	.attr("transform", "translate(" + margin.left + "," + 0 + ")")
         .call(yAxis)
+
+        svg.append("text")
+		    .attr("class", "y-label")
+		    .attr("text-anchor", "end")
+		    .attr("x", -100)
+		    .attr("y", 20)
+		    .attr("transform", "rotate(-90)")
+		    .text("Instances Reported");
 
         //append bars      
         let bars = svg.selectAll(".bars")
@@ -225,7 +238,7 @@ var steamgraph = function(filePath){
 			var svgwidth = 700;
 	        var svgheight = 300;
 
-	        var margin = {top: 20, right: 20, bottom: 20, left: 40},
+	        var margin = {top: 20, right: 20, bottom: 20, left: 75},
 	        width = svgwidth - margin.left - margin.right,
 	        height = svgheight - margin.bottom;
 	        
@@ -283,6 +296,14 @@ var steamgraph = function(filePath){
 	            .attr("width", svgwidth)
 	            .attr("height", svgheight)
 
+	        svg.append("text")
+		    .attr("class", "y-label")
+		    .attr("text-anchor", "end")
+		    .attr("x", -100)
+		    .attr("y", 20)
+		    .attr("transform", "rotate(-90)")
+		    .text("Instances Reported");
+
 	        // add legend
 	        svg.selectAll("circle")
 	        .data(["Sexual Exploitation", "Forced Labour", "Other"])
@@ -294,7 +315,7 @@ var steamgraph = function(filePath){
 	        .attr("r", 4)
 	        .attr("fill", (d) => colors(d))
 
-	        svg.selectAll("text")
+	        svg.selectAll("legend_text")
 	        .data(["Sexual Exploitation", "Forced Labour", "Other"])
 	        .enter()
 	        .append("text")
@@ -396,7 +417,7 @@ var steamgraph = function(filePath){
 
 	      plot("Female")
 	      
-	      d3.selectAll("#radio")
+	      d3.selectAll("#steam_radio")
     		.on("change", function(d){
     		gender = d.target.defaultValue
     		plot(gender)})
@@ -436,7 +457,7 @@ var scatter_plot = function(filePath){
 		var svgwidth = 550;
         var svgheight = 550;
 
-        var margin = {top: 40, right: 40, bottom: 40, left: 40},
+        var margin = {top: 40, right: 40, bottom: 75, left: 75},
         width = svgwidth - margin.left - margin.right,
         height = svgheight - margin.bottom;
         
@@ -469,10 +490,25 @@ var scatter_plot = function(filePath){
         .attr("transform", "translate(" + 0 + "," + height + ")")
         .call(xAxis)
 
+        svg.append("text")
+	    .attr("class", "x-label")
+	    .attr("text-anchor", "middle")
+	   	.attr("x", 250)
+	    .attr("y", 525)
+	    .text("Instances of Forced Labor Reported");
+
         svg.append("g")
         .attr("class", "yAxis")
        	.attr("transform", "translate(" + margin.left + "," + 0 + ")")
         .call(yAxis)
+
+        svg.append("text")
+		    .attr("class", "y-label")
+		    .attr("text-anchor", "middle")
+		    .attr("x", -250)
+		    .attr("y", 20)
+		    .attr("transform", "rotate(-90)")
+		    .text("Instances of Sexual Exploitation Reported");
 
         // plots circles
         svg.selectAll(".circles")
@@ -706,7 +742,6 @@ var network_plot = function(filePath){
 function choropleth_plot(filePath){
 	let data = read_data(filePath);
 	let topo = d3.json("world-110m.geojson")
-	//import {geoAitoff} from "https://cdn.skypack.dev/d3-geo-projection@4";
 
 	//let topo = JSON.parse("world-110m.geojson")
 	topo.then(function(topo){
@@ -727,7 +762,7 @@ function choropleth_plot(filePath){
 			const colorScale = d3.scaleThreshold()
 			.domain([0, 10, 100, 200, 1000, 5000, 10000])
 			//.domain([0, d3.max(d3.map(exploitation, d => d.Instances))])
-			.range([ "#FEF9E7" ,"#fff7ec","#F7DC6F","#F5B041","#DC7633","#DC7633","#943126"])
+			.range([ "#FEF9E7" ,"#fff7ec","#F7DC6F","#F5B041","#DC7633","#943126", "#66033c"])
 
 			console.log(d3.max(d3.map(exploitation, d => d.Instances)))
 			console.log(colorScale(200))
@@ -786,7 +821,6 @@ function choropleth_plot(filePath){
 	    	.attr("width", svgwidth)
 	    	.attr("height", svgheight)
 
-	    	console.log(topo.features)
 	    	world = svg.append("g")
 	    	.attr("class", "world");
 			world.selectAll("path")
@@ -826,163 +860,48 @@ function choropleth_plot(filePath){
 					})
 					.style("opacity", 1)
 					.on("mouseover", mouseOver)
-					.on("mouseleave", mouseLeave)	    	
+					.on("mouseleave", mouseLeave)	 
+
+			//legend
+			var labels = ["0-10", "10-100", "100-200", "200-1000", "1000-5000", "5000-10000", "10000+" ]
 
 			
-		// end of data.then
+			var legend = svg.selectAll('g.legendEntry')
+    		.data(colorScale.range().reverse())
+   			.enter()
+    		.append('g')
+    		.attr('class', 'legendEntry');
+
+	
+			legend.append("rect")
+			.attr("x", 40 )
+    		.attr("y", function(d, i) {
+       			return i * 20;})
+       		.attr("width", 10)
+		   .attr("height", 10)
+		   .style("stroke", "black")
+		   .style("stroke-width", 1)
+		   .style("fill", function(d){return d;}); 
+
+		   legend
+		    .append('text')
+		    .attr("class", "legend_text")
+		    .attr("x", 55) //leave 5 pixel space after the <rect>
+		    .attr("y", function(d, i) {
+		       return i * 20;})
+		    .attr("dy", "0.5em") //place text one line *below* the x,y point
+		    .text(function(d,i) {
+		        return labels.reverse()[i];})
+
+		    // end of topo then
+		    })
+		//end of data then
 		})
 
-	// end of topo.then
-	})
-
-
-		/*
-		// start chlotopleth drawing
-		function ready(error, topo) {
-			// topo is the data received from the d3.queue function (the world.geojson)
-			// the data from world_population.csv (country code and country population) is saved in data variable
-
-		let mouseOver = function(d) {
-			d3.selectAll(".Country")
-				.transition()
-				.duration(200)
-				.style("opacity", .5)
-				.style("stroke", "transparent");
-			d3.select(this)
-				.transition()
-				.duration(200)
-				.style("opacity", 1)
-				.style("stroke", "black");
-			tooltip.style("left", (d3.event.pageX + 15) + "px")
-				.style("top", (d3.event.pageY - 28) + "px")
-				.transition().duration(400)
-				.style("opacity", 1)
-				.text(d.properties.name + ': ' + Math.round((d.total / 1000000) * 10) / 10 + ' mio.');
-		}
-
-		let mouseLeave = function() {
-			d3.selectAll(".Country")
-				.transition()
-				.duration(200)
-				.style("opacity", 1)
-				.style("stroke", "transparent");
-			tooltip.transition().duration(300)
-				.style("opacity", 0);
-		}
-
-		// Draw the map
-		world = svg.append("g")
-	    .attr("class", "world");
-		world.selectAll("path")
-					.data(topo.features)
-					.enter()
-					.append("path")
-					// draw each country
-					// d3.geoPath() is a built-in function of d3 v4 and takes care of showing the map from a properly formatted geojson file, if necessary filtering it through a predefined geographic projection
-					.attr("d", d3.geoPath().projection(projection))
-
-					//retrieve the name of the country from data
-					.attr("data-name", function(d) {
-						return d.properties.name
-					})
-
-					// set the color of each country
-					.attr("fill", function(d) {
-						d.total = exploitation.get(d.id) || 0;
-						return colorScale(d.total);
-					})
-
-					// add a class, styling and mouseover/mouseleave and click functions
-					.style("stroke", "transparent")
-					.attr("class", function(d) {
-						return "Country"
-					})
-					.attr("id", function(d) {
-						return d.id
-					})
-					.style("opacity", 1)
-					.on("mouseover", mouseOver)
-					.on("mouseleave", mouseLeave)
-					.on("click", click);
-		  
-			// Legend
-			const x = d3.scaleLinear()
-				.domain([2.6, 75.1])
-				.rangeRound([600, 860]);
-
-			const legend = svg.append("g")
-				.attr("id", "legend");
-
-			const legend_entry = legend.selectAll("g.legend")
-				.data(colorScale.range().map(function(d) {
-					d = colorScale.invertExtent(d);
-					if (d[0] == null) d[0] = x.domain()[0];
-					if (d[1] == null) d[1] = x.domain()[1];
-					return d;
-				}))
-				.enter().append("g")
-				.attr("class", "legend_entry");
-
-			const ls_w = 20,
-				ls_h = 20;
-
-			legend_entry.append("rect")
-				.attr("x", 20)
-				.attr("y", function(d, i) {
-					return height - (i * ls_h) - 2 * ls_h;
-				})
-				.attr("width", ls_w)
-				.attr("height", ls_h)
-				.style("fill", function(d) {
-					return colorScale(d[0]);
-				})
-				.style("opacity", 0.8);
-
-			legend_entry.append("text")
-				.attr("x", 50)
-				.attr("y", function(d, i) {
-					return height - (i * ls_h) - ls_h - 6;
-				})
-				.text(function(d, i) {
-					if (i === 0) return "< " + d[1] / 1000000 + " m";
-					if (d[1] < d[0]) return d[0] / 1000000 + " m +";
-					return d[0] / 1000000 + " m - " + d[1] / 1000000 + " m";
-				});
-
-			legend.append("text").attr("x", 15).attr("y", 280).text("Population (Million)");
-		}
-
-		// Zoom functionality
-		function click(d) {
-		  var x, y, k;
-
-		  if (d && centered !== d) {
-		    var centroid = path.centroid(d);
-		    x = -(centroid[0] * 6);
-		    y = (centroid[1] * 6);
-		    k = 3;
-		    centered = d;
-		  } else {
-		    x = 0;
-		    y = 0;
-		    k = 1;
-		    centered = null;
-		  }
-
-		  world.selectAll("path")
-		      .classed("active", centered && function(d) { return d === centered; });
-
-		  world.transition()
-		      .duration(750)
-		      .attr("transform", "translate(" + x + "," + y + ") scale(" + k + ")" );
-		}
-		*/
-		
-		//END OF DATA.THEN
-	//})
-
-
 }
+
+// **************************************
+
 var yuh = function(filePath) {
     tmp = [];
 
