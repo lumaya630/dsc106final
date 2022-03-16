@@ -182,6 +182,14 @@ var bar_plot_forms = function(filePath){
         .on("mousemove", mousemove)
         .on("mouseout", mouseout)
 
+        svg.append("text")
+            .attr("class", "x label")
+            .attr("x", 30)
+            .attr("y", 290)
+		    .attr("text-anchor", "end")
+            .style("font-size", 15)
+            .text("Type")
+
         bars
           .transition("growth")
           .duration(1000)
@@ -303,6 +311,14 @@ var steamgraph = function(filePath){
 		    .attr("y", 20)
 		    .attr("transform", "rotate(-90)")
 		    .text("Instances Reported");
+
+		    svg.append("text")
+            .attr("class", "x label")
+            .attr("x", 30)
+            .attr("y", 290)
+		    .attr("text-anchor", "end")
+            .style("font-size", 15)
+            .text("Year")
 
 	        // add legend
 	        svg.selectAll("circle")
@@ -964,6 +980,7 @@ var yuh = function(filePath) {
             width = 350 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
+
         function newdct(tmp) {
 
 
@@ -975,21 +992,17 @@ var yuh = function(filePath) {
             var rs = Object.keys(tmp).map(function(y) {
               return y;
             });
-            var svg;
 
-
-            svg = d3.select("#yuh")
+            
+        var svg = d3.select("#yuh")
               .append("svg").attr("id", "tempp")
-                .attr("height", 400)
+                .attr("height", 450)
                 .attr("width", 460)
               .append("g")
                 .attr("transform",
                       "translate(60,30)");
-
-            var helper = d3.select('#yuh').append('div').style('opacity', 0).attr('class', 'tooltip');
-            
             var y_Scale = d3.scaleLinear()
-              .domain([0, 2000])
+              .domain([0, 3000])
               .range([ 300, 10]);
 
             svg.append("g")
@@ -1006,49 +1019,65 @@ var yuh = function(filePath) {
               .call(d3.axisBottom(x_Scale))
               .selectAll("text")
                 .attr("transform", "translate(-10,0)rotate(-45)");
-
-            var helper2 = d3.line().y(function(tmp) { return y_Scale(tmp) }).x(function(tmp) { return x_Scale(rs[s.indexOf(tmp)]) + 25 })
-            
-
             var yx = svg.selectAll("mybar")
               .data(s);
             yx.exit().remove();
+
+            
+            var Tooltip = d3.select('#yuh').append('div').style('opacity', 0).attr('class', 'tooltip');
+
+
+       	
             yx.enter()
               .append("circle")
                 .attr("cy", function(tmp) { return y_Scale(tmp); })
                 .attr("cx", function(tmp) { return 26 + x_Scale(rs[s.indexOf(tmp)]); })
                 .attr("r", 5)
-                .on("mousemove", (a,b)=> {
-                    helper.transition().style("opacity", 0.5).duration(140);
-                    helper.style("top", a.pageY + "px").style("left", a.pageX + "px").html(b.toFixed(3));
+                .on("mouseover", (e,d)=> {
+                    Tooltip.transition().duration(100).style("opacity", 0.8);
+                    Tooltip.html(d.toFixed(2)).style("left", e.pageX - 100 + "px").style("top", -3050 + e.pageY + "px");
                 })
-                .on("mouseover", (a,b)=> {
-                    helper.transition().style("opacity", 0.5).duration(140);
-                    helper.style("top", a.pageY + "px").style("left", a.pageX + "px").html(b.toFixed(3));
+                .on("mousemove", (e,d)=> {
+                    Tooltip.transition().duration(100).style("opacity", 0.8);
+                    Tooltip.html(d.toFixed(2)).style("left", e.pageX  - 100 + "px").style("top", -3050 + e.pageY + "px");
                 })
+                .on("mouseout", function(d) {
+    				d3.select(this).attr('fill', 'orange').style("opacity", 1);})
+ 
                 .attr("stroke", "none")
                 .attr("class", "circle")
                 .attr("fill", "orange");
             svg.append("text")
-            .attr("class", "title")
-            .attr("x", 0)
-            .attr("y", -10);
+            .attr("class", "x label")
+            .attr("x", 200)
+            .attr("y", 400)
+		    .attr("text-anchor", "end")
+            .style("font-size", 15)
+            .text("Exploitation Type")
+
+
             svg.append("text")
             .attr("text-anchor", "end")
             .attr("class", "y label")
-            .attr("y", -30)
-            .attr("x", -40)
+            .attr("y", -50)
+            .attr("x", -80)
             .style("font-size", 15)
-            .attr("transform", "rotate(-90)");
+            .attr("transform", "rotate(-90)")
+            .text("Instances Reported")
+
+//start from here
+            
+
+
 
         }
 
-        d3.selectAll("#radio").on("change", tmp=>{
+        d3.selectAll("#scatter_radio").on("change", tmp=>{
+        	d3.select("#tempp").remove()
         	var age = tmp.target.value;
-        	console.log("yay");
+
+        	newdct(dct[age])
         })
-
-
         newdct(dct["0--8"]);
     }
 )}
