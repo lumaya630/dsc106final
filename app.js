@@ -4,7 +4,6 @@ function final(){
     bar_plot_forms(filePath);
     steamgraph(filePath);
     scatter_plot(filePath);
-    bar_plot_recruiters(filePath);
     network_plot(filePath);
     choropleth_plot(filePath);
     yuh(filePath);
@@ -539,12 +538,6 @@ var scatter_plot = function(filePath){
         .style("opacity", 0.5)
       
 	})	
-}
-
-// **************************************
-   
-var bar_plot_recruiters = function(filePath){
-
 }
 
 
