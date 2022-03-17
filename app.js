@@ -540,6 +540,12 @@ var scatter_plot = function(filePath){
 	})	
 }
 
+// **************************************
+   
+var bar_plot_recruiters = function(filePath){
+
+}
+
 
 // **************************************
 
@@ -1074,4 +1080,3 @@ var yuh = function(filePath) {
         newdct(dct["0--8"]);
     }
 )}
-#:)
