@@ -91,7 +91,7 @@ var bar_plot_forms = function(filePath){
 		var svgwidth = 700;
         var svgheight = 300;
 
-        var margin = {top: 20, right: 20, bottom: 20, left: 75},
+        var margin = {top: 20, right: 20, bottom: 60, left: 75},
         width = svgwidth - margin.left - margin.right,
         height = svgheight - margin.bottom;
         
@@ -165,6 +165,13 @@ var bar_plot_forms = function(filePath){
 		    .attr("y", 20)
 		    .attr("transform", "rotate(-90)")
 		    .text("Instances Reported");
+		svg.append("text")
+	    .attr("class", "x-label")
+	    .attr("text-anchor", "middle")
+	   	.attr("x", 315)
+	    .attr("y", 280)
+	    .text("Exploitation");
+
 
         //append bars      
         let bars = svg.selectAll(".bars")
@@ -181,14 +188,7 @@ var bar_plot_forms = function(filePath){
         .on("mousemove", mousemove)
         .on("mouseout", mouseout)
 
-        svg.append("text")
-            .attr("class", "x label")
-            .attr("x", 30)
-            .attr("y", 290)
-		    .attr("text-anchor", "end")
-            .style("font-size", 15)
-            .text("Type")
-
+        
         bars
           .transition("growth")
           .duration(1000)
@@ -245,7 +245,7 @@ var steamgraph = function(filePath){
 			var svgwidth = 700;
 	        var svgheight = 300;
 
-	        var margin = {top: 20, right: 20, bottom: 20, left: 75},
+	        var margin = {top: 20, right: 20, bottom: 60, left: 75},
 	        width = svgwidth - margin.left - margin.right,
 	        height = svgheight - margin.bottom;
 	        
@@ -312,11 +312,10 @@ var steamgraph = function(filePath){
 		    .text("Instances Reported");
 
 		    svg.append("text")
-            .attr("class", "x label")
-            .attr("x", 30)
-            .attr("y", 290)
+            .attr("class", "x-label")
+            .attr("x", 320)
+            .attr("y", 280)
 		    .attr("text-anchor", "end")
-            .style("font-size", 15)
             .text("Year")
 
 	        // add legend
@@ -538,12 +537,6 @@ var scatter_plot = function(filePath){
         .style("opacity", 0.5)
       
 	})	
-}
-
-// **************************************
-   
-var bar_plot_recruiters = function(filePath){
-
 }
 
 
@@ -906,7 +899,7 @@ function choropleth_plot(filePath){
 		       return i * 20;})
 		    .attr("dy", "0.5em") //place text one line *below* the x,y point
 		    .text(function(d,i) {
-		        return labels.reverse()[i];})
+		        return labels.reverse()[i] + " people";})
 
 		    // end of topo then
 		    })
@@ -975,7 +968,7 @@ var yuh = function(filePath) {
 	    		}
 	    	}
 	    }
-		var margin = {top: 20, right: 50, bottom: 30, left: 0},
+		var margin = {top: 20, right: 50, bottom: 30, left: 40},
             width = 350 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
@@ -1000,22 +993,35 @@ var yuh = function(filePath) {
               .append("g")
                 .attr("transform",
                       "translate(60,30)");
+
+                var tickLabels = ["Forced Labour", "Abduction",
+                					"Sexual Exploit", "Forced Marriage", 
+                					"Organ Removal", "Other Exploit",
+                					"Forced Military", "is Other" ];
+       	
+
             var y_Scale = d3.scaleLinear()
               .domain([0, 3000])
               .range([ 300, 10]);
 
-            svg.append("g")
-              .call(d3.axisLeft(y_Scale));
+            
+
 
             var x_Scale = d3.scaleBand()
               .range([0,370])
               .domain(rs)
               .padding(0.15);
+            var xAxis = d3.axisBottom().scale(x_Scale).
+       	tickFormat((d,i) => tickLabels[i])
+       	var yAxis = d3.axisLeft().scale(y_Scale)
+       	svg.append("g")
+              .call(yAxis);
+
 
             svg.append("g")
                 .style("text-anchor", "end")
               .attr("transform", "translate(0,300)")
-              .call(d3.axisBottom(x_Scale))
+              .call(xAxis)
               .selectAll("text")
                 .attr("transform", "translate(-10,0)rotate(-45)");
             var yx = svg.selectAll("mybar")
@@ -1047,7 +1053,7 @@ var yuh = function(filePath) {
                 .attr("class", "circle")
                 .attr("fill", "orange");
             svg.append("text")
-            .attr("class", "x label")
+            .attr("class", "x-label")
             .attr("x", 200)
             .attr("y", 400)
 		    .attr("text-anchor", "end")
@@ -1055,14 +1061,17 @@ var yuh = function(filePath) {
             .text("Exploitation Type")
 
 
+
             svg.append("text")
             .attr("text-anchor", "end")
-            .attr("class", "y label")
+            .attr("class", "y-label")
             .attr("y", -50)
             .attr("x", -80)
             .style("font-size", 15)
             .attr("transform", "rotate(-90)")
             .text("Instances Reported")
+
+
 
 //start from here
             
